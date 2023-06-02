@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools", "wheels"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["static_frame_pyodide"]
+
+[tool.setuptools.dynamic]
+version = {attr = "static_frame_pyodide.__version__"}
+readme = {file = ["README.md"]}
+
+[project]
+name = "static-frame-pyodide"
+authors = [
+    {name = "Christopher Ariza",},
+]
+description = "StaticFrame packaged for use in Pyodide, PyScript, and WebAssembly/Emscripten environments"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+keywords = ["immutable", "array", "numpy", "data structures"]
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'Topic :: Software Development',
+    'Topic :: Scientific/Engineering',
+    'Topic :: Scientific/Engineering :: Information Analysis',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: MacOS :: MacOS X',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: POSIX',
+    'Environment :: WebAssembly',
+    'Programming Language :: Python :: 3.11',
+]
+dependencies = [
+]
+dynamic = ["version"]
+
+# [project.scripts]
+# my-script = "my_package.module:function"
