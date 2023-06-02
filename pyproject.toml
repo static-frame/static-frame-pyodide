@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheels"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
@@ -12,7 +12,7 @@ readme = {file = ["README.md"]}
 [project]
 name = "static-frame-pyodide"
 authors = [
-    {name = "Christopher Ariza",},
+    {name = "Christopher Ariza"},
 ]
 description = "StaticFrame packaged for use in Pyodide, PyScript, and WebAssembly/Emscripten environments"
 readme = "README.md"
@@ -32,8 +32,7 @@ classifiers = [
     'Environment :: WebAssembly',
     'Programming Language :: Python :: 3.11',
 ]
-dependencies = [
-]
+dependencies = []
 dynamic = ["version"]
 
 # [project.scripts]
