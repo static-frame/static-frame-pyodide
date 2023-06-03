@@ -2,7 +2,7 @@ import sys
 import asyncio
 
 _SF = '1.4.5'
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 
 if sys.platform != 'emscripten':
     raise RuntimeError('This package is only for use in emscripten environments')
@@ -17,7 +17,20 @@ async def _load():
     f'{_URL}arraykit-0.4.8-cp311-cp311-emscripten_3_1_32_wasm32.whl')
     await micropip.install('static-frame==1.4.5')
 
-asyncio.run(_load())
+
+try:
+    loop = asyncio.get_running_loop()
+except RuntimeError:  # 'RuntimeError: There is no current event loop...'
+    loop = None
+
+if loop and loop.is_running():
+    print('Async event loop already running. Adding coroutine to the event loop.')
+    loop.create_task(_load())
+else:
+    print('Starting new event loop')
+    result = asyncio.run(_load())
+
+# asyncio.run(_load())
 # delegate interface
 from static_frame import *
 
