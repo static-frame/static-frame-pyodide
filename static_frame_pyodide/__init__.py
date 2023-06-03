@@ -25,10 +25,10 @@ except RuntimeError:  # 'RuntimeError: There is no current event loop...'
 
 if loop and loop.is_running():
     print('Async event loop already running. Adding coroutine to the event loop.')
-    loop.create_task(_load())
+    task = loop.create_task(_load())
 else:
     print('Starting new event loop')
-    result = asyncio.run(_load())
+    asyncio.run(_load())
 
 # asyncio.run(_load())
 # delegate interface
