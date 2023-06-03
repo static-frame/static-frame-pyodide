@@ -30,4 +30,7 @@ def build(context):
     context.run(f'{sys.executable} -m build')
 
 
-# twine upload dist/*
+@invoke.task(pre=(build,), post=(clean,))
+def release(context):
+    context.run('twine upload dist/*')
+

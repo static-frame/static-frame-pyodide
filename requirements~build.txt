@@ -1,2 +1,3 @@
 build
+twine
 invoke==2.1.2
