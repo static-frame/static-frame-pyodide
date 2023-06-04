@@ -32,9 +32,25 @@ def test_new_loop():
         print(sfpyo)
 
 
+@patch('sys.platform', 'emscripten')
+def test_found_loop():
+    with mock_modules():
+
+        async def g():
+            print('calling g')
+            import static_frame_pyodide as sfpyo
+            print(sfpyo)
+            await asyncio.sleep(0)
+
+        async def f():
+            await asyncio.sleep(0)
+            await g()
+
+        asyncio.run(f())
+
 
 if __name__ == '__main__':
-    test_new_loop()
+    test_found_loop()
 
 
 

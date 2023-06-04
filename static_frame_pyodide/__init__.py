@@ -36,7 +36,10 @@ except RuntimeError:
 
 if loop and loop.is_running():
     print('loop already running')
-    asyncio.run_coroutine_threadsafe(_add_task(), loop)
+    asyncio.run_coroutine_threadsafe(_add_task(loop), loop)
+    # loop.run_until_complete(_add_task(loop))
+    # asyncio.run_coroutine(_add_task(loop), loop)
+
 else:
     print('starting new event loop')
     asyncio.run(_load())
