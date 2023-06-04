@@ -1,7 +1,7 @@
 import sys
 import asyncio
 
-__version__ = '0.1.3'
+__version__ = '0.1.4'
 _SF = '1.4.5'
 _AK = '0.4.8'
 _AM = '0.1.9'
