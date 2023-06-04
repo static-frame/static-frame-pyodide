@@ -17,20 +17,23 @@ async def _load():
     f'{_URL}arraykit-0.4.8-cp311-cp311-emscripten_3_1_32_wasm32.whl')
     await micropip.install('static-frame==1.4.5')
 
+async def _add_task(loop):
+    task = loop.create_task(_load())
+    await task
+
 
 try:
     loop = asyncio.get_running_loop()
-except RuntimeError:  # 'RuntimeError: There is no current event loop...'
+except RuntimeError:
     loop = None
 
 if loop and loop.is_running():
-    print('Async event loop already running. Adding coroutine to the event loop.')
-    task = loop.create_task(_load())
+    print('loop already running')
+    asyncio.run_coroutine_threadsafe(_add_task(), loop)
 else:
-    print('Starting new event loop')
+    print('starting new event loop')
     asyncio.run(_load())
 
-# asyncio.run(_load())
 # delegate interface
 from static_frame import *
 
