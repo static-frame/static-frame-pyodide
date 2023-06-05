@@ -1,7 +1,7 @@
 import sys
 import asyncio
 
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 _SF = '1.4.5'
 _AK = '0.4.8'
 _AM = '0.1.9'
@@ -23,11 +23,11 @@ async def _load():
         ])
 
     await micropip.install(f'static-frame=={_SF}')
-    await asyncio.sleep(0)
     sf = __import__('static_frame')
     for name in dir(sf):
         if not name.startswith('_'):
             setattr(sys.modules[__name__], name, getattr(sf, name))
+    await asyncio.sleep(0)
 
 try:
     loop = asyncio.get_running_loop()
