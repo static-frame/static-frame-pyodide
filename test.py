@@ -3,7 +3,7 @@ import asyncio
 from contextlib import contextmanager
 from unittest.mock import patch
 
-# import micropip; await micropip.install('static-frame-pyodide'); import static_frame_pyodide as sf
+# import micropip; await micropip.install('static-frame-pyodide==0.1.5'); import static_frame_pyodide as sf; print(dir(sf))
 
 class MockMicropip:
     @staticmethod
