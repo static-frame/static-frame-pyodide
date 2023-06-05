@@ -23,11 +23,11 @@ async def _load():
         ])
 
     await micropip.install(f'static-frame=={_SF}')
-
-# async def _add_task(loop):
-#     task = loop.create_task(_load())
-#     await task
-
+    await asyncio.sleep(0)
+    sf = __import__('static_frame')
+    for name in dir(sf):
+        if not name.startswith('_'):
+            setattr(sys.modules[__name__], name, getattr(sf, name))
 
 try:
     loop = asyncio.get_running_loop()
@@ -36,14 +36,17 @@ except RuntimeError:
 
 if loop and loop.is_running():
     print('loop already running')
-    _ = loop.create_task(_load())
-    # asyncio.run_coroutine_threadsafe(_add_task(loop), loop)
-    # loop.run_until_complete(_add_task(loop))
-    # asyncio.run_coroutine(_add_task(loop), loop)
+    loop.create_task(_load())
 else:
     print('starting new event loop')
     asyncio.run(_load())
 
 # delegate interface
-from static_frame import *
+# attempt = 3
+# while attempt > 0:
+#     try:
+#         from static_frame import *
+#         break
+#     except ModuleNotFoundError:
+#         attempt -= 1
 

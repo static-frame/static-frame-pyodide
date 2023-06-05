@@ -3,7 +3,7 @@ import asyncio
 from contextlib import contextmanager
 from unittest.mock import patch
 
-
+# import micropip; await micropip.install('static-frame-pyodide'); import static_frame_pyodide as sf
 
 class MockMicropip:
     @staticmethod
@@ -29,7 +29,6 @@ def mock_modules():
 def test_new_loop():
     with mock_modules():
         import static_frame_pyodide as sfpyo
-        print(sfpyo)
         del sys.modules['static_frame_pyodide']
 
 
@@ -39,7 +38,6 @@ def test_found_loop():
 
         async def g():
             import static_frame_pyodide as sfpyo
-            print(sfpyo)
             await asyncio.sleep(0)
 
         async def f():
