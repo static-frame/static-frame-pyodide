@@ -34,17 +34,6 @@ async def _micropip_and_import() -> bool:
         if not name.startswith('_'):
             setattr(_MODULE, name, getattr(sf, name))
 
-# async def _schedule_and_await(loop):
-#     task = loop.create_task(_micropip_and_import())
-#     await task
-
-# async def _schedule_and_await(loop):
-#     await asyncio.wait_for(_micropip_and_import(), None)
-#     print('post wait-for')
-
-# async def _schedule_and_await(loop):
-#     await loop.run_in_executor(None, _micropip_and_import())
-
 #-------------------------------------------------------------------------------
 if sys.platform != 'emscripten':
     raise RuntimeError('This package is only for use in emscripten environments')
@@ -57,31 +46,11 @@ except RuntimeError:
 if loop and loop.is_running():
     print('loop already running')
 
-    # task = loop.create_task(_micropip_and_import())
-
-    # new_loop = asyncio.new_event_loop()
-    # new_loop.run_until_complete(_micropip_and_import())
-
-    # loop.create_task(_schedule_and_await(loop))
-
-    # for coro in asyncio.as_completed((_micropip_and_import(),)):
-    #     # loop.create_task(coro)
-    #     print(coro)
-
-    # def finished(_):
-    #     print('finished')
-    # future = asyncio.run_coroutine_threadsafe(_micropip_and_import(), loop)
-    # future.add_done_callback(finished)
-    # assert future.result(20) == True
-
-    # loop.call_soon(_micropip_and_import())
-
-    def sub():
-        sub_loop = asyncio.new_event_loop()
+    def target():
         return asyncio.run(_micropip_and_import())
 
     import threading
-    t = threading.Thread(target=sub)
+    t = threading.Thread(target=target)
     t.start()
     t.join()
 
