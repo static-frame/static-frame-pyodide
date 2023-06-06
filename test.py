@@ -4,29 +4,30 @@ from contextlib import contextmanager
 from unittest.mock import patch
 
 # import micropip; await micropip.install('static-frame-pyodide==0.1.5'); import static_frame_pyodide as sf; print(dir(sf))
-
-class MockMicropip:
-    @staticmethod
-    async def install(*args, **kwargs):
-        print(args)
-        await asyncio.sleep(0)
-
 class MockStaticFrame:
     Frame = 0
     Series = 1
+
+class MockMicropip:
+    @staticmethod
+    async def install(arg):
+        print(arg)
+        name = arg if isinstance(arg, str) else arg[0]
+        print(name)
+        if name.startswith('static-frame'):
+            sys.modules['static_frame'] = MockStaticFrame
+        await asyncio.sleep(0)
 
 
 @contextmanager
 def mock_modules():
     sys.modules['micropip'] = MockMicropip
-    sys.modules['static_frame'] = MockStaticFrame
     try:
         yield
     finally:
-        del sys.modules['micropip']
-        del sys.modules['static_frame']
-        if 'static_frame_pyodide' in sys.modules:
-            del sys.modules['static_frame_pyodide']
+        for mod in ('micropip', 'static_frame', 'static_frame_pyodide'):
+            if mod in sys.modules:
+                del sys.modules[mod]
 
 
 @patch('sys.platform', 'emscripten')
