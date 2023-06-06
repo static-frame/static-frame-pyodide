@@ -12,7 +12,9 @@ class MockMicropip:
         await asyncio.sleep(0)
 
 class MockStaticFrame:
-    pass
+    Frame = 0
+    Series = 1
+
 
 @contextmanager
 def mock_modules():
@@ -23,13 +25,16 @@ def mock_modules():
     finally:
         del sys.modules['micropip']
         del sys.modules['static_frame']
+        if 'static_frame_pyodide' in sys.modules:
+            del sys.modules['static_frame_pyodide']
 
 
 @patch('sys.platform', 'emscripten')
 def test_new_loop():
     with mock_modules():
         import static_frame_pyodide as sfpyo
-        del sys.modules['static_frame_pyodide']
+        assert sfpyo.Frame == MockStaticFrame.Frame
+        assert sfpyo.Series == MockStaticFrame.Series
 
 
 @patch('sys.platform', 'emscripten')
@@ -39,16 +44,16 @@ def test_found_loop():
         async def g():
             import static_frame_pyodide as sfpyo
             await asyncio.sleep(0)
+            assert sfpyo.Frame == MockStaticFrame.Frame
+            assert sfpyo.Series == MockStaticFrame.Series
 
         async def f():
-            await asyncio.sleep(0)
             await g()
 
         asyncio.run(f())
-        del sys.modules['static_frame_pyodide']
 
 if __name__ == '__main__':
-    test_new_loop()
+    # test_new_loop()
     test_found_loop()
 
 

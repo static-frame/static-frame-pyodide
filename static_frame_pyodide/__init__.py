@@ -6,13 +6,13 @@ _SF = '1.4.5'
 _AK = '0.4.8'
 _AM = '0.1.9'
 _EMS = '3_1_32' # emscripten version
-
-if sys.platform != 'emscripten':
-    raise RuntimeError('This package is only for use in emscripten environments')
-
 _URL = 'https://flexatone.s3.us-west-1.amazonaws.com/packages/'
 
-async def _load():
+
+_MODULE = sys.modules[__name__]
+
+
+async def _micropip_and_import() -> bool:
     print('micropiping modules')
     import micropip
 
@@ -26,8 +26,24 @@ async def _load():
     sf = __import__('static_frame')
     for name in dir(sf):
         if not name.startswith('_'):
-            setattr(sys.modules[__name__], name, getattr(sf, name))
+            setattr(_MODULE, name, getattr(sf, name))
+            print('set', name)
     await asyncio.sleep(0)
+
+async def _schedule_and_await(loop):
+    task = loop.create_task(_micropip_and_import())
+    await task
+
+# async def _schedule_and_await(loop):
+#     await asyncio.wait_for(_micropip_and_import(), None)
+#     print('post wait-for')
+
+# async def _schedule_and_await(loop):
+#     await loop.run_in_executor(None, _micropip_and_import())
+
+#-------------------------------------------------------------------------------
+if sys.platform != 'emscripten':
+    raise RuntimeError('This package is only for use in emscripten environments')
 
 try:
     loop = asyncio.get_running_loop()
@@ -36,17 +52,27 @@ except RuntimeError:
 
 if loop and loop.is_running():
     print('loop already running')
-    loop.create_task(_load())
+
+    # new_loop = asyncio.new_event_loop()
+    # new_loop.run_until_complete(_micropip_and_import())
+
+    # loop.create_task(_schedule_and_await(loop))
+
+    # task = loop.create_task(_micropip_and_import())
+    # assert task.result() == True
+
+    # for coro in asyncio.as_completed((_micropip_and_import(),)):
+    #     # loop.create_task(coro)
+    #     print(coro)
+
+    # this always times out and does not run
+    # future = asyncio.run_coroutine_threadsafe(_micropip_and_import(), loop)
+    # assert future.result(20) == True
+    # loop.call_soon(_micropip_and_import())
+
 else:
     print('starting new event loop')
-    asyncio.run(_load())
+    asyncio.run(_micropip_and_import())
 
-# delegate interface
-# attempt = 3
-# while attempt > 0:
-#     try:
-#         from static_frame import *
-#         break
-#     except ModuleNotFoundError:
-#         attempt -= 1
+
 
