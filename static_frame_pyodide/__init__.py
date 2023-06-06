@@ -11,6 +11,8 @@ _URL = 'https://flexatone.s3.us-west-1.amazonaws.com/packages/'
 
 _MODULE = sys.modules[__name__]
 
+# relevant:
+# https://ipython.readthedocs.io/en/stable/interactive/autoawait.html
 
 async def _micropip_and_import() -> bool:
     print('micropiping modules')
