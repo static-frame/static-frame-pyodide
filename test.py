@@ -13,7 +13,6 @@ class MockMicropip:
     async def install(arg):
         print(arg)
         name = arg if isinstance(arg, str) else arg[0]
-        print(name)
         if name.startswith('static-frame'):
             sys.modules['static_frame'] = MockStaticFrame
         await asyncio.sleep(0)
@@ -44,7 +43,7 @@ def test_found_loop():
 
         async def g():
             import static_frame_pyodide as sfpyo
-            await asyncio.sleep(0)
+            await asyncio.sleep(1) # BAD!
             assert sfpyo.Frame == MockStaticFrame.Frame
             assert sfpyo.Series == MockStaticFrame.Series
 
@@ -54,7 +53,7 @@ def test_found_loop():
         asyncio.run(f())
 
 if __name__ == '__main__':
-    # test_new_loop()
+    test_new_loop()
     test_found_loop()
 
 
