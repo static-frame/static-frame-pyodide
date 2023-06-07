@@ -12,6 +12,10 @@ _URL = 'https://flexatone.s3.us-west-1.amazonaws.com/packages/'
 
 _MODULE = sys.modules[__name__]
 
+# relevant:
+# https://ipython.readthedocs.io/en/stable/interactive/autoawait.html
+
+
 async def _micropip_and_import() -> bool:
     print('micropiping')
     micropip = __import__('micropip')
@@ -53,10 +57,12 @@ except RuntimeError:
 if loop and loop.is_running():
     print('loop already running')
 
-    loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
+    # loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
 
     # new_loop = asyncio.new_event_loop()
-    # new_loop.run_until_complete(_micropip_and_import())
+
+    # cannot do this as loop is running
+    # loop.run_until_complete(_micropip_and_import())
 
     # loop.create_task(_schedule_and_await(loop))
 
