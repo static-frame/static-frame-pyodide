@@ -1,7 +1,7 @@
 import sys
 import asyncio
 
-__version__ = '0.1.5'
+__version__ = '0.1.6'
 
 _SF = '1.4.5'
 _AK = '0.4.8'
@@ -12,27 +12,26 @@ _URL = 'https://flexatone.s3.us-west-1.amazonaws.com/packages/'
 
 _MODULE = sys.modules[__name__]
 
-# relevant:
-# https://ipython.readthedocs.io/en/stable/interactive/autoawait.html
-
-
 async def _micropip_and_import() -> bool:
-    print('micropiping')
+    print('micropiping start')
     micropip = __import__('micropip')
 
-    await asyncio.wait_for(micropip.install([
+    await micropip.install([
         'sqlite3',
         f'{_URL}arraymap-{_AM}-cp311-cp311-emscripten_{_EMS}_wasm32.whl',
         f'{_URL}arraykit-{_AK}-cp311-cp311-emscripten_{_EMS}_wasm32.whl',
         f'static-frame=={_SF}',
-        ]),
-        None)
+        ])
 
-    sf = __import__('static_frame')
-    for name in dir(sf):
-        if not name.startswith('_'):
-            setattr(_MODULE, name, getattr(sf, name))
-            print('set', name)
+    print('micropiping complete')
+
+    # sf = __import__('static_frame')
+
+    # for name in dir(sf):
+    #     if not name.startswith('_'):
+    #         setattr(_MODULE, name, getattr(sf, name))
+    #         print('set', name)
+    # await asyncio.sleep(0)
 
 # async def _schedule_and_await(loop):
 #     task = loop.create_task(_micropip_and_import())
@@ -56,13 +55,10 @@ except RuntimeError:
 
 if loop and loop.is_running():
     print('loop already running')
-
-    # loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
+    loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
 
     # new_loop = asyncio.new_event_loop()
-
-    # cannot do this as loop is running
-    # loop.run_until_complete(_micropip_and_import())
+    # new_loop.run_until_complete(_micropip_and_import())
 
     # loop.create_task(_schedule_and_await(loop))
 
