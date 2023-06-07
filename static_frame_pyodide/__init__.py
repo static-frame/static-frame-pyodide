@@ -20,11 +20,8 @@ async def _micropip_and_import() -> bool:
         'sqlite3',
         f'{_URL}arraymap-{_AM}-cp311-cp311-emscripten_{_EMS}_wasm32.whl',
         f'{_URL}arraykit-{_AK}-cp311-cp311-emscripten_{_EMS}_wasm32.whl',
+        f'static-frame=={_SF}',
         ]),
-        None)
-
-    await asyncio.wait_for(
-        micropip.install(f'static-frame=={_SF}'),
         None)
 
     sf = __import__('static_frame')
@@ -33,7 +30,6 @@ async def _micropip_and_import() -> bool:
         if not name.startswith('_'):
             setattr(_MODULE, name, getattr(sf, name))
             print('set', name)
-    await asyncio.sleep(0)
 
 # async def _schedule_and_await(loop):
 #     task = loop.create_task(_micropip_and_import())
@@ -57,8 +53,9 @@ except RuntimeError:
 
 if loop and loop.is_running():
     print('loop already running')
+    asyncio.gather([asyncio.wait_for(_micropip_and_import(), None)])
 
-    loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
+    # loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
 
     # new_loop = asyncio.new_event_loop()
     # new_loop.run_until_complete(_micropip_and_import())
