@@ -25,7 +25,6 @@ async def _micropip_and_import() -> bool:
         None)
 
     sf = __import__('static_frame')
-
     for name in dir(sf):
         if not name.startswith('_'):
             setattr(_MODULE, name, getattr(sf, name))
@@ -53,9 +52,8 @@ except RuntimeError:
 
 if loop and loop.is_running():
     print('loop already running')
-    asyncio.gather([asyncio.wait_for(_micropip_and_import(), None)])
 
-    # loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
+    loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
 
     # new_loop = asyncio.new_event_loop()
     # new_loop.run_until_complete(_micropip_and_import())
