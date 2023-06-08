@@ -32,7 +32,7 @@ def mock_modules():
 @patch('sys.platform', 'emscripten')
 def test_new_loop():
     with mock_modules():
-        import static_frame_pyodide
+        import static_frame_pyodide as sfpyo
         assert sfpyo.Frame == MockStaticFrame.Frame
         assert sfpyo.Series == MockStaticFrame.Series
 
@@ -42,8 +42,8 @@ def test_found_loop():
     with mock_modules():
 
         async def g():
-            import static_frame_pyodide
-            await asyncio.sleep(1) # BAD!
+            import static_frame_pyodide as sfpyo
+            await asyncio.sleep(1) # necessary
             assert sfpyo.Frame == MockStaticFrame.Frame
             assert sfpyo.Series == MockStaticFrame.Series
 
