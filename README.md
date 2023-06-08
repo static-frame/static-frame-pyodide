@@ -12,5 +12,10 @@ Try StaticFrame in Pyodide here: https://pyodide.org/en/stable/console.html
 >>> import static_frame_pyodide as sf
 ```
 
+While ``pyodide.http.open_url()`` will not work with any URL, it works with the sample provided by the
+[``pyscript-ice-cream``](https://github.com/Cheukting/pyscript-ice-cream) project.
+
+
 ![Pyodide screen shot](https://github.com/static-frame/static-frame-pyodide/blob/main/doc/sf-pyodide.png)
+
 
