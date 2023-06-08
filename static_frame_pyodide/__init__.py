@@ -26,7 +26,7 @@ async def _micropip_and_import() -> bool:
     try:
         sf = __import__('static_frame')
     except ModuleNotFoundError:
-        print("Cannot import statc-frame into this namespace, try `micropip.install('static-frame'); import static_frame as sf`")
+        print("Cannot import statc-frame into this namespace, try `import static_frame as sf`")
         sf = None
 
     if sf:
