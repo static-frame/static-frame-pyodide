@@ -17,27 +17,26 @@ _MODULE = sys.modules[__name__]
 
 
 async def _micropip_and_import() -> bool:
-    print('micropiping')
     micropip = __import__('micropip')
 
-    await asyncio.wait_for(micropip.install([
+    await micropip.install([
         'sqlite3',
         f'{_URL}arraymap-{_AM}-cp311-cp311-emscripten_{_EMS}_wasm32.whl',
         f'{_URL}arraykit-{_AK}-cp311-cp311-emscripten_{_EMS}_wasm32.whl',
-        ]),
-        None)
+        ])
 
-    await asyncio.wait_for(
-        micropip.install(f'static-frame=={_SF}'),
-        None)
+    await micropip.install(f'static-frame=={_SF}')
 
-    sf = __import__('static_frame')
+    try:
+        sf = __import__('static_frame')
+    except ModuleNotFoundError:
+        print("Cannot import statc-frame into this namespace, try `micropip.install('static-frame')")
+        sf = None
 
-    for name in dir(sf):
-        if not name.startswith('_'):
-            setattr(_MODULE, name, getattr(sf, name))
-            print('set', name)
-    await asyncio.sleep(0)
+    if sf:
+        for name in dir(sf):
+            if not name.startswith('_'):
+                setattr(_MODULE, name, getattr(sf, name))
 
 # async def _schedule_and_await(loop):
 #     task = loop.create_task(_micropip_and_import())
@@ -60,9 +59,7 @@ except RuntimeError:
     loop = None
 
 if loop and loop.is_running():
-    print('loop already running')
-
-    # loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
+    loop.create_task(asyncio.wait_for(_micropip_and_import(), None))
 
     # new_loop = asyncio.new_event_loop()
 
