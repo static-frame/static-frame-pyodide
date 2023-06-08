@@ -1,9 +1,11 @@
 # static-frame-pyodide
 StaticFrame packaged for use in Pyodide, PyScript, and WebAssembly/Emscripten environments.
 
-This package, on import, uses `micropip` to install versions of StaticFrame dependencies (`arraykit` and `arraymap`) compiled for Emscripten.
+This package, on import, uses `micropip` to install versions of StaticFrame dependencies (`arraykit` and `arraymap`) compiled for Emscripten, and then delegates the StaticFrame API to this module.
 
 ## Usage in Pyodide:
+
+Try StaticFrame in Pyodide here: https://pyodide.org/en/stable/console.html
 
 ```python-repl
 >>> import micropip; await micropip.install('static-frame-pyodide')
