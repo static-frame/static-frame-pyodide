@@ -10,5 +10,5 @@ This package, on import, uses `micropip` to install versions of StaticFrame depe
 >>> import static_frame_pyodide as sf
 ```
 
-![Pyodide screen shot]()
+![Pyodide screen shot](https://github.com/static-frame/static-frame-pyodide/blob/main/doc/sf-pyodide.png)
 
